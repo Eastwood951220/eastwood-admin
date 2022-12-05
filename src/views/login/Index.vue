@@ -4,43 +4,113 @@
       <h2>Login</h2>
       <el-form label-position="top"
                ref="loginFormRef"
+               :rules="loginRules"
+               :model="loginForm"
                hide-required-asterisk
                class="login-form"
                autocomplete="on">
-<!--        <el-form-item label="Username" prop="username">
-          <el-input ref="userNameRef"
-                    v-model="state.loginForm.username"
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="loginForm.username"
                     name="username"
                     type="text"
                     tabindex="1"
                     autocomplete="on"
           />
         </el-form-item>
-        <el-form-item label="Password" prop="password">
-          <el-input ref="passwordRef"
-                    v-model="state.loginForm.password"
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="loginForm.password"
                     type="password"
                     name="password"
+                    show-password
                     tabindex="2"
                     autocomplete="on"
           />
-        </el-form-item>-->
-        <el-button class="btn">
-          Submit
+        </el-form-item>
+        <el-form-item label="验证码" prop="code">
+          <el-input v-model="loginForm.code"
+                    class="code-input"
+                    name="code"
+                    tabindex="3"
+                    autocomplete="on">
+            <template #append>
+              <img @click="getCode" class="code-img" :src="codeUrl" alt=""/>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-button class="btn" @click="handleLogin">
+          登陆
         </el-button>
       </el-form>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-const userNameRef = ref(null)
-const passwordRef = ref(null)
-const loginFormRef = ref(null)
-const router = useRouter()
-const route = useRoute()
+<script setup lang="ts" name="Login">
+import {getCodeImg} from "@/apis/user";
+import {CodeImgResponse, LoginParams} from "@/types/user";
+import type {FormInstance, FormRules} from 'element-plus';
+import {useUserStore} from "@/store/modules/user";
+
+const route = useRoute();
+const router = useRouter();
+const userStore = useUserStore()
+const loginFormRef = ref<FormInstance>()
+let codeUrl = ref("")
+const loginForm: LoginParams = reactive({
+  username: "",
+  password: "",
+  code: "",
+  uuid: ""
+})
+const loginRules = computed<FormRules>(() => ({
+  username: [
+    {
+      required: true,
+      message: "请填写用户名",
+      trigger: "blur"
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: "请填写密码",
+      trigger: "blur"
+    }
+  ],
+  code: [
+    {
+      required: true,
+      message: "请填写验证码",
+      trigger: "blur"
+    }
+  ]
+}))
 
 
+onMounted(() => {
+  getCode()
+})
+
+const getCode = () => {
+  getCodeImg().then(res => {
+    let data: CodeImgResponse = res.data
+    codeUrl.value = "data:image/gif;base64," + data.img
+    loginForm.uuid = data.uuid
+  })
+}
+const handleLogin = () => {
+  loginFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      try {
+        await userStore.login(loginForm)
+        await router.replace((route.query.redirect as string) || '/');
+      } catch (e) {
+        getCode()
+        loginForm.code = ""
+      }
+    }
+  });
+}
 
 </script>
 
@@ -56,7 +126,6 @@ const route = useRoute()
 
   .login-box {
     width: 400px;
-    height: 364px;
     background-color: #0c1622;
     margin: 100px auto;
     border-radius: 10px;
@@ -91,6 +160,18 @@ const route = useRoute()
       0 0 50px 0 #03e9f4,
       0 0 100px 0 #03e9f4;
       transition: all 1s linear;
+    }
+
+    .code-input {
+      ::v-deep(.el-input-group__append) {
+        padding: 0;
+      }
+
+      .code-img {
+        height: 32px;
+        width: 100px;
+        cursor: pointer;
+      }
     }
 
   }

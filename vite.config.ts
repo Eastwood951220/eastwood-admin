@@ -8,7 +8,8 @@ import AutoImport from 'unplugin-auto-import/vite'
 // 组建自动引入
 import Components from 'unplugin-vue-components/vite';
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
-
+// setup 插件
+import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 // https://vitejs.dev/config/
 
 function pathResolve(dir: string) {
@@ -32,6 +33,7 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
         // ******插件配置******
         plugins: [
             vue(),
+            vueSetupExtend(),
             AutoImport({
                 imports: [
                     'vue',
