@@ -8,6 +8,7 @@ import type {
     HttpResponse
 } from './types'
 import {ElMessage, ElLoading, ElMessageBox} from 'element-plus';
+import {store} from "@/store";
 import {useUserStore} from '@/store/modules/user'
 
 class Request {
@@ -154,9 +155,8 @@ class Request {
     // 全局请求和响应拦截器
 
     private _handleRequest(config: RequestConfig) {
-        const isToken = (config.headers || {}).isToken || true;
-
-        if (getToken() && isToken) {
+        const isToken = (config.headers || {}).isToken === false
+        if (getToken() && !isToken) {
             config.headers["Authorization"] = "Bearer " + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
         }
         return config;
@@ -168,9 +168,10 @@ class Request {
     }
 
     private _handleResponse(response: AxiosResponse) {
-        const userStore = useUserStore()
+        const userStore = useUserStore(store)
         const data = response.data
         const code = data.code || 200;
+        const msg = data.msg || 'success';
         switch (code) {
             case 200:
                 return data
@@ -181,10 +182,11 @@ class Request {
                         type: 'warning'
                     }
                 ).then(async r => {
-                    await userStore.logout()
+                    await userStore.Logout()
                     window.location.href = "/login"
                 })
                 return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+            default:
 
         }
         /* if (data.code === 200) {

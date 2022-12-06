@@ -1,6 +1,6 @@
 import httpRequest from "@/utils/request";
 
-import {CodeImgResponse, LoginParams, LoginResponse, UserInfoResponse} from "@/types/user";
+import {CodeImgResponse, LoginParams, LoginResponse, UserInfoResponse} from "@/modals/user";
 
 export function getCodeImg() {
     return httpRequest<CodeImgResponse>({
@@ -35,13 +35,6 @@ export function logout() {
 export function getInfo() {
     return httpRequest<UserInfoResponse>({
         url: '/getInfo',
-        method: 'get'
-    })
-}
-
-export const getRouters = () => {
-    return httpRequest({
-        url: '/getRouters',
         method: 'get'
     })
 }

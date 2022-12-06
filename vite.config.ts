@@ -10,6 +10,7 @@ import Components from 'unplugin-vue-components/vite';
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 // setup 插件
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
+
 // https://vitejs.dev/config/
 
 function pathResolve(dir: string) {
@@ -78,6 +79,7 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
             alias: {
                 // 别名配置
                 '@': resolve(__dirname, 'src'),
+                '#t': resolve(__dirname, 'types')
             }
         },
         // 测试环境保留打印

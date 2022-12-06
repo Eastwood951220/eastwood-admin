@@ -1,9 +1,9 @@
-import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
+import {createRouter, createWebHistory, RouteRecordRawPlus} from 'vue-router'
 import type {App} from 'vue';
 import {setupRouterGuard} from './guard';
 import {concatObjectValue} from '@/utils/helper';
 
-const constantRoutes = concatObjectValue<RouteRecordRaw>(
+export const constantRoutes = concatObjectValue<RouteRecordRawPlus>(
     import.meta.glob('./routes/constantModules/*.ts', {eager: true, import: 'routes'})
 )
 
@@ -14,5 +14,5 @@ export const router = createRouter({
 
 export function setupRouter(app: App<Element>) {
     setupRouterGuard(router)
-    app.use(router)
 }
+

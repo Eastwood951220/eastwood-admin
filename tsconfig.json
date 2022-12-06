@@ -23,7 +23,9 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "types/auto-import.d.ts"
+    "types/auto-import.d.ts",
+    "types/api.d.ts",
+    "types/vue-router.d.ts",
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

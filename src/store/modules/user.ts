@@ -1,8 +1,8 @@
 import {defineStore} from "pinia";
-import {LoginParams, UserInfoResponse} from "@/types/user";
-import {UserInfoResult} from "@/types/user";
-import {getToken, removeToken} from "@/utils/cookies";
-import {login as loginApi, logout as logoutApi, getInfo} from '@/apis/user'
+import {LoginParams, UserInfoResponse} from "@/modals/user";
+import {UserInfoResult} from "@/modals/user";
+import {getToken, removeToken, setToken} from "@/utils/cookies";
+import {login, logout, getInfo} from '@/apis/user'
 
 interface UserState {
     user: UserInfoResult;
@@ -22,19 +22,19 @@ export const useUserStore = defineStore({
         }
     },
     actions: {
-        login: async function (params: LoginParams) {
-            const res = await loginApi(params)
+        Login: async function (params: LoginParams) {
+            const res = await login(params)
+            setToken(res.data.token)
             this.token = res.data.token
         },
-        logout: async function () {
-            await logoutApi()
+        Logout: async function () {
+            await logout()
             removeToken()
             this.token = ""
         },
-        getUserInfo: async function () {
+        GetUserInfo: async function () {
             const res = await getInfo()
             const data: UserInfoResponse = res.data;
-            console.log(data)
             this.roles = data.roles || []
             this.permissions = data.permissions || []
             this.user = data.user

@@ -31,7 +31,7 @@
                     class="code-input"
                     name="code"
                     tabindex="3"
-                    autocomplete="on">
+                    autocomplete="off">
             <template #append>
               <img @click="getCode" class="code-img" :src="codeUrl" alt=""/>
             </template>
@@ -47,13 +47,14 @@
 
 <script setup lang="ts" name="Login">
 import {getCodeImg} from "@/apis/user";
-import {CodeImgResponse, LoginParams} from "@/types/user";
+import {CodeImgResponse, LoginParams} from "@/modals/user";
 import type {FormInstance, FormRules} from 'element-plus';
+import {store} from "@/store";
 import {useUserStore} from "@/store/modules/user";
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore()
+const userStore = useUserStore(store)
 const loginFormRef = ref<FormInstance>()
 let codeUrl = ref("")
 const loginForm: LoginParams = reactive({
@@ -102,7 +103,7 @@ const handleLogin = () => {
   loginFormRef.value?.validate(async (valid) => {
     if (valid) {
       try {
-        await userStore.login(loginForm)
+        await userStore.Login(loginForm)
         await router.replace((route.query.redirect as string) || '/');
       } catch (e) {
         getCode()

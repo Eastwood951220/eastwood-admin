@@ -8,15 +8,15 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
 function bootstrap() {
+
     const app = createApp(App)
+    app.use(store)
+
+    // 配置路由
+    app.use(router)
+    setupRouter(app);
 
     app.use(ElementPlus)
-    app.use(store)
-    // 配置路由
-    setupRouter(app);
-    app.use(router)
-
-
     app.mount('#app')
 }
 
