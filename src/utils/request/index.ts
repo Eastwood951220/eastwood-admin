@@ -1,6 +1,6 @@
 import Request from './request'
 import {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from "axios";
-import {ElMessage, ElLoading, ElMessageBox} from 'element-plus';
+import {ElMessage, ElMessageBox} from 'element-plus';
 import {getToken, removeToken} from "@/utils/cookies";
 import {useUserStoreWithout} from '@/store/modules/user'
 
@@ -42,7 +42,7 @@ function _responseInterceptors(response: AxiosResponse) {
         return Promise.reject("服务器异常")
     }
     const code = data.code || 200;
-    const msg = data.msg || errorCode[`${code.toString() as keyof typeof errorCode}`] || errorCode.default
+    const msg = data.msg || errorCode[code] || errorCode.default
     switch (code) {
         case 200:
             return data
@@ -52,20 +52,17 @@ function _responseInterceptors(response: AxiosResponse) {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }
-            ).then(async r => {
+            ).then(async () => {
                 await userStore.Logout()
                 window.location.href = "/login"
             })
             return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
-        case 500:
+        default:
             ElMessage({
                 message: msg,
                 type: 'error'
             })
             return Promise.reject(new Error(msg))
-        default:
-            break
-
     }
 }
 
