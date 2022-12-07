@@ -2,7 +2,7 @@ import {defineConfig, loadEnv} from 'vite'
 import type {UserConfig, ConfigEnv} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import {resolve} from 'path'
-import {createPlugin} from 'vite-plugin-autogeneration-import-file';
+
 // API 自动引入
 import AutoImport from 'unplugin-auto-import/vite'
 // 组建自动引入
@@ -10,6 +10,8 @@ import Components from 'unplugin-vue-components/vite';
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 // setup 插件
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
+//
+import {createHtmlPlugin} from 'vite-plugin-html'
 
 // https://vitejs.dev/config/
 
@@ -17,9 +19,8 @@ function pathResolve(dir: string) {
     return resolve(__dirname, '.', dir);
 }
 
-const {autoImport, resolver} = createPlugin();
 export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
-    console.log(command, mode, '===')
+    console.log(command, mode)
     const root = process.cwd()
     const env = loadEnv(mode, root) // 环境变量对象
     const isDebugger = env.VITE_APP_IS_DEBUGGER === 'true'
@@ -48,6 +49,17 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
                 resolvers: [
                     ElementPlusResolver({importStyle: false})
                 ],
+            }),
+            createHtmlPlugin({
+                minify: false,
+                entry: '/src/main.ts',
+                template: '/public/index.html',
+                inject: {
+                    data: {
+                        title: env.VITE_APP_TITLE,
+                        icon: '/public/vite.svg'
+                    },
+                },
             })
         ],
         // ******开发服务器配置******
@@ -61,7 +73,7 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
                 [env.VITE_APP_BASE_URL]: {
                     target: env.VITE_APP_REQUEST_URL,
                     changeOrigin: true, //是否跨域
-                    rewrite: path => path.replace(/^\/api/, '')
+                    rewrite: path => path.replace(new RegExp(`^${env.VITE_APP_BASE_URL}`), '')
                 },
             }
         },
@@ -79,7 +91,7 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
             alias: {
                 // 别名配置
                 '@': resolve(__dirname, 'src'),
-                '#t': resolve(__dirname, 'types')
+                '#': resolve(__dirname, 'types')
             }
         },
         // 测试环境保留打印

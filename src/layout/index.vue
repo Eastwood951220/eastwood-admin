@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts" name="Layout">
-import {useUserStore} from "@/store/modules/user";
-const user = useUserStore()
 const msg = ref("234")
 </script>
 

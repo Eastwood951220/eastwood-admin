@@ -8,7 +8,7 @@
                :model="loginForm"
                hide-required-asterisk
                class="login-form"
-               autocomplete="on">
+               autocomplete="off">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="loginForm.username"
                     name="username"
@@ -23,7 +23,7 @@
                     name="password"
                     show-password
                     tabindex="2"
-                    autocomplete="on"
+                    autocomplete="off"
           />
         </el-form-item>
         <el-form-item label="验证码" prop="code">
@@ -47,14 +47,13 @@
 
 <script setup lang="ts" name="Login">
 import {getCodeImg} from "@/apis/user";
-import {CodeImgResponse, LoginParams} from "@/modals/user";
+import {LoginParams} from "@/modals/user";
 import type {FormInstance, FormRules} from 'element-plus';
-import {store} from "@/store";
 import {useUserStore} from "@/store/modules/user";
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore(store)
+const userStore = useUserStore()
 const loginFormRef = ref<FormInstance>()
 let codeUrl = ref("")
 const loginForm: LoginParams = reactive({
@@ -86,7 +85,6 @@ const loginRules = computed<FormRules>(() => ({
     }
   ]
 }))
-
 
 onMounted(() => {
   getCode()
