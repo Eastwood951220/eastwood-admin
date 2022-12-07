@@ -1,7 +1,6 @@
-import {store} from "@/store";
-import {useUserStore} from "@/store/modules/user";
+import {useUserStoreWithout} from "@/store/modules/user";
 
-const userStore = useUserStore(store)
+const userStore =  useUserStoreWithout()
 
 function authPermission(permission: string) {
     const all_permission = "*:*:*";

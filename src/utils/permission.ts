@@ -1,6 +1,6 @@
 import {DefineComponent} from 'vue';
 import {RawRouteComponent, RouteRecordRawPlus} from 'vue-router';
-import auth from "@/plugins/auth";
+import auth from "@/utils/auth";
 import Layout from '@/layout/index.vue'
 import ParentView from "@/layout/components/ParentView/index.vue"
 import InnerLink from '@/layout/components/InnerLink/index.vue'
@@ -22,6 +22,7 @@ export function filterDynamicRoutes(routes: RouteRecordRawPlus[]) {
     return res
 }
 
+
 export type DynamicViewsModules = Record<string, () => Promise<DefineComponent>>;
 let dynamicViewsModules: DynamicViewsModules;
 
@@ -42,7 +43,7 @@ export function transitionComponent(component: string): RawRouteComponent {
         default:
             const moduleName = `/src/views/${component}.vue`
             if (dynamicViewsModules[moduleName]) {
-                return dynamicViewsModules[moduleName]()
+                return dynamicViewsModules[moduleName]
             } else {
                 return Page404
             }
@@ -52,7 +53,7 @@ export function transitionComponent(component: string): RawRouteComponent {
 export function filterAsyncRouter(asyncRouterMap: RouteRecordRawPlus[], lastRouter?: RouteRecordRawPlus, type?: boolean) {
     return asyncRouterMap.filter(route => {
         // 去除外链
-        if (route.meta?.link) {
+        if (type && route.meta?.link) {
             return false
         }
         if (type && route.children) {
@@ -61,7 +62,6 @@ export function filterAsyncRouter(asyncRouterMap: RouteRecordRawPlus[], lastRout
         if (route.component) {
             route.component = transitionComponent(<string>route.component)
         }
-
         if (route.children != null && route.children && route.children.length) {
             route.children = filterAsyncRouter(route.children, route, type)
         } else {
@@ -72,16 +72,28 @@ export function filterAsyncRouter(asyncRouterMap: RouteRecordRawPlus[], lastRout
     })
 }
 
-function filterChildren(childrenMap: RouteRecordRawPlus[], lastRouter?: RouteRecordRawPlus) {
+function filterChildren(childrenMap: RouteRecordRawPlus[], lastRouter?: RouteRecordRawPlus): RouteRecordRawPlus[] {
     let children: RouteRecordRawPlus[] = []
     childrenMap.forEach((el: RouteRecordRawPlus) => {
+        if (el.children && el.children.length) {
+            if (el.component === 'ParentView' && !lastRouter) {
+                el.children.forEach(c => {
+                    c.path = el.path + '/' + c.path
+                    if (c.children && c.children.length) {
+                        children = children.concat(filterChildren(c.children, c))
+                        return
+                    }
+                    children.push(c)
+                })
+                return
+            }
+        }
         if (lastRouter) {
             el.path = lastRouter.path + '/' + el.path
-        }
-        if (el.children && el.children.length) {
-
         }
         children = children.concat(el)
     })
     return children
 }
+
+

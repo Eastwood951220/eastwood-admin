@@ -1,4 +1,5 @@
 import {defineStore} from "pinia";
+import {store} from "@/store";
 import {LoginParams, UserInfoResponse} from "@/modals/user";
 import {UserInfoResult} from "@/modals/user";
 import {getToken, removeToken, setToken} from "@/utils/cookies";
@@ -33,12 +34,17 @@ export const useUserStore = defineStore({
             this.token = ""
         },
         GetUserInfo: async function () {
+            console.log(new Date())
             const res = await getInfo()
-            const data: UserInfoResponse = res.data;
+            const data = res.data;
             this.roles = data.roles || []
             this.permissions = data.permissions || []
             this.user = data.user
         }
     }
 })
+
+export function useUserStoreWithout() {
+    return useUserStore(store);
+}
 

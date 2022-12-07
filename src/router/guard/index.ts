@@ -1,36 +1,35 @@
 import type {Router} from 'vue-router';
-import {store} from "@/store";
-import {useUserStore} from "@/store/modules/user";
-import {usePermissionStore} from "@/store/modules/permission";
+import {useUserStoreWithout} from "@/store/modules/user";
+import {usePermissionStoreWithout} from "@/store/modules/permission";
 import {start, done} from "@/utils/nProgress";
+import {removeToken} from "@/utils/cookies";
 
 const whiteList = ['/login']
 
 function createPermissionGuard(router: Router) {
     router.beforeEach(async (to) => {
-        const userStore = useUserStore(store);
-        const permissionStore = usePermissionStore(store);
+        const userStore = useUserStoreWithout();
+        const permissionStore = usePermissionStoreWithout();
         if (userStore.token) {
             if (to.path === '/login') {
                 await router.replace({path: '/'})
                 return false
             } else {
                 if (userStore.roles.length === 0) {
-                    await userStore.GetUserInfo()
-                    await permissionStore.GenerateRoutes()
-                    return true
+                    try {
+                        await userStore.GetUserInfo()
+                        await permissionStore.GenerateRoutes()
+                        await router.replace({...to})
+                    } catch (e) {
+                        handleErrorGuard(to.fullPath)
+                    }
                 }
             }
         } else {
             if (whiteList.includes(to.path)) {
                 return true
             } else {
-                await router.replace({
-                    path: '/login',
-                    query: {
-                        redirect: to.fullPath
-                    }
-                })
+                handleErrorGuard(to.fullPath)
             }
         }
     })
@@ -44,6 +43,13 @@ function createProgressGuard(router: Router) {
     router.afterEach(async () => {
         done()
     })
+}
+
+function handleErrorGuard(path?: string) {
+    if (!window.location.pathname.includes('login')) {
+        window.location.href = `/login?redirect=${path}`
+    }
+    removeToken()
 }
 
 export function setupRouterGuard(router: Router) {

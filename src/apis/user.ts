@@ -3,15 +3,15 @@ import httpRequest from "@/utils/request";
 import {CodeImgResponse, LoginParams, LoginResponse, UserInfoResponse} from "@/modals/user";
 
 export function getCodeImg() {
-    return httpRequest<CodeImgResponse>({
+    return httpRequest<null, CodeImgResponse>({
         url: '/captchaImage',
         headers: {
             isToken: false,
-            isLoading: true
         },
         method: 'get',
         timeout: 20000
     })
+
 }
 
 export function login(data: LoginParams) {
@@ -33,7 +33,7 @@ export function logout() {
 }
 
 export function getInfo() {
-    return httpRequest<UserInfoResponse>({
+    return httpRequest<null, UserInfoResponse>({
         url: '/getInfo',
         method: 'get'
     })

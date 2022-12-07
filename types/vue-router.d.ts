@@ -77,7 +77,7 @@ declare module 'vue-router' {
     }
 
     export declare type RouteRecordRawPlus = {
-        component?: string | RawRouteComponent
+        component?: RawRouteComponent | string
         children?: RouteRecordRawPlus[]
     } & RouteRecordRaw
 }

@@ -33,7 +33,7 @@
                     tabindex="3"
                     autocomplete="off">
             <template #append>
-              <img @click="getCode" class="code-img" :src="codeUrl" alt=""/>
+              <img @click="getCode" class="code-img" :src="codeUrl" alt="验证码"/>
             </template>
           </el-input>
         </el-form-item>
@@ -94,7 +94,7 @@ onMounted(() => {
 
 const getCode = () => {
   getCodeImg().then(res => {
-    let data: CodeImgResponse = res.data
+    let data = res.data
     codeUrl.value = "data:image/gif;base64," + data.img
     loginForm.uuid = data.uuid
   })

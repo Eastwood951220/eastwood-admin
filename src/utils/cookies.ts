@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie'
-import {loginConfig as config} from '@/config';
-
+import config from '@/config/login'
 
 export const getToken = () => Cookies.get(config.tokenName)
 export const setToken = (token: string) => Cookies.set(config.tokenName, token, {

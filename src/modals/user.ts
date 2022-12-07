@@ -1,25 +1,25 @@
-export interface CodeImgResponse {
+export type CodeImgResponse = BaseApiResponse<{
     captchaEnabled: boolean
     img: string
     uuid: string
-}
+}>
 
-export interface LoginParams {
+export type LoginParams = {
     code: string
     password: string
     username: string
     uuid: string
 }
 
-export interface LoginResponse {
+export type LoginResponse = BaseApiResponse<{
     token: string
-}
+}>
 
-export interface UserInfoResponse {
+export type UserInfoResponse = BaseApiResponse<{
     permissions: string[]
     roles: string[]
     user: UserInfoResult
-}
+}>
 
 export interface UserInfoResult {
     admin: boolean

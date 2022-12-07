@@ -1,11 +1,14 @@
 <template>
-  22222
+  <div>
+    USER33333
+  </div>
 </template>
 
-<script setup lang="ts" name="Home">
+<script setup lang="ts" name="User">
 import {useUserStore} from "@/store/modules/user";
 
-const user = useUserStore()
+const userStore = useUserStore()
+
 </script>
 
 <style scoped>

@@ -14,7 +14,7 @@ function bootstrap() {
 
     // 配置路由
     app.use(router)
-    setupRouter(app);
+    setupRouter(app)
 
     app.use(ElementPlus)
     app.mount('#app')

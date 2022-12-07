@@ -4,6 +4,7 @@ import nProgress from "nprogress";
 let number = 0
 
 export const done = (n = 1) => {
+    console.log(n)
     number -= n;
     if (number <= 0) {
         nProgress.done();
@@ -14,6 +15,7 @@ export const done = (n = 1) => {
 };
 
 export const start = (n = 1) => {
+    console.log(n)
     if (number <= 0) {
         nProgress.start();
         number = n;
