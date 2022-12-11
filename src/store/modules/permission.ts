@@ -37,7 +37,7 @@ export const usePermissionStore = defineStore({
             rewriteRoutes.forEach(route => {
                 router.addRoute(route)
             })
-            this.sidebarRouters = sidebarRouters
+            this.sidebarRouters = _.concat(constantRoutes, sidebarRouters)
             this.addRoutes = rewriteRoutes
             this.routes = _.concat(constantRoutes, rewriteRoutes)
         }

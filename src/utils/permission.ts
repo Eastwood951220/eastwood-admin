@@ -1,5 +1,5 @@
 import {DefineComponent} from 'vue';
-import {RawRouteComponent, RouteRecordRawPlus} from 'vue-router';
+import {RouteRecordRawPlus, RouteComponent} from 'vue-router';
 import auth from "@/utils/auth";
 import Layout from '@/layout/index.vue'
 import ParentView from "@/layout/components/ParentView/index.vue"
@@ -32,7 +32,7 @@ export function initDynamicViewsModules() {
     }
 }
 
-export function transitionComponent(component: string): RawRouteComponent {
+export function transitionComponent(component: string): RouteComponent {
     switch (component) {
         case 'Layout':
             return Layout

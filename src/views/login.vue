@@ -33,7 +33,7 @@
                     tabindex="3"
                     autocomplete="off">
             <template #append>
-              <img @click="getCode" class="code-img" :src="codeUrl" alt="验证码"/>
+              <img v-if="codeUrl" @click="getCode" class="code-img" :src="codeUrl" alt="验证码"/>
             </template>
           </el-input>
         </el-form-item>

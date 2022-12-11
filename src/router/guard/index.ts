@@ -8,7 +8,7 @@ const whiteList = ['/login']
 
 function createPermissionGuard(router: Router) {
     router.beforeEach(async (to) => {
-        document.title = to.meta.title || import.meta.env.VITE_APP_TITLE
+        document.title = import.meta.env.VITE_APP_TITLE + "-" + to.meta.title
         const userStore = useUserStoreWithout();
         const permissionStore = usePermissionStoreWithout();
         if (userStore.token) {

@@ -1,11 +1,15 @@
 import {createApp} from 'vue'
 import {router, setupRouter} from "@/router";
 import {store} from '@/store'
-import '@/styles/index.scss'
 import App from './App.vue'
 
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+// element-plus 配置
+
+
+// mitt
+import mitt from 'mitt'
+
+import 'virtual:svg-icons-register'
 
 function bootstrap() {
 
@@ -16,7 +20,7 @@ function bootstrap() {
     app.use(router)
     setupRouter(app)
 
-    app.use(ElementPlus)
+
     app.mount('#app')
 }
 

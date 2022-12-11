@@ -3,13 +3,21 @@ import Layout from '@/layout/index.vue'
 
 export const routes: Array<RouteRecordRawPlus> = [
     {
-        path: '/',
-        redirect: '/index',
+        path: '/redirect',
+        component: Layout,
+        hidden: true,
+        children: [
+            {
+                path: '/redirect/:path(.*)',
+                component: () => import('@/views/redirect.vue')
+            }
+        ]
     },
     {
         path: "/login",
         name: "Login",
-        component: () => import('@/views/login/index.vue'),
+        meta: {title: '登陆'},
+        component: () => import('@/views/login.vue'),
         hidden: true
     },
     {
@@ -27,7 +35,7 @@ export const routes: Array<RouteRecordRawPlus> = [
                 path: 'index',
                 component: () => import('@/views/dashboard/index.vue'),
                 name: 'Index',
-                meta: {title: '首页', affix: true}
+                meta: {title: '首页', affix: true, icon: 'dashboard'}
             }
         ]
     },

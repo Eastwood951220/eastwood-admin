@@ -1,7 +1,7 @@
-import {_RouteRecordBase, RouteComponent, RouteMeta, RawRouteComponent, RouteRecordRaw} from 'vue-router';
+import {RawRouteComponent, RouteRecordRaw} from 'vue-router';
 
 declare module 'vue-router' {
-    export interface RouteMeta extends Record<string | number | symbol, unknown> {
+    export interface RouteMeta extends Record<String | Number | Symbol, unknown> {
 
         /**
          * 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
@@ -79,6 +79,7 @@ declare module 'vue-router' {
     export declare type RouteRecordRawPlus = {
         component?: RawRouteComponent | string
         children?: RouteRecordRawPlus[]
+        noShowingChildren?: Boolean
     } & RouteRecordRaw
 }
 export {}

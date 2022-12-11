@@ -2,16 +2,19 @@ import {defineConfig, loadEnv} from 'vite'
 import type {UserConfig, ConfigEnv} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import {resolve} from 'path'
-
+import {createPlugin} from 'vite-plugin-autogeneration-import-file';
 // API 自动引入
 import AutoImport from 'unplugin-auto-import/vite'
 // 组建自动引入
 import Components from 'unplugin-vue-components/vite';
+import {createStyleImportPlugin, ElementPlusResolve as ElementPlusStyleResolve} from "vite-plugin-style-import";
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 // setup 插件
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
-//
+// index.html 控制
 import {createHtmlPlugin} from 'vite-plugin-html'
+// 自定义SVG
+import {createSvgIconsPlugin} from 'vite-plugin-svg-icons'
 
 // https://vitejs.dev/config/
 
@@ -19,6 +22,7 @@ function pathResolve(dir: string) {
     return resolve(__dirname, '.', dir);
 }
 
+const {autoImport, resolver} = createPlugin();
 export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
     console.log(command, mode)
     const root = process.cwd()
@@ -27,6 +31,7 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
     console.log('环境变量------', env)
     console.log('文件路径（ process.cwd()）------', root)
     console.log('文件路径（dirname）------', __dirname + '/src')
+    // @ts-ignore
     return {
         root,
         base: '/',
@@ -41,14 +46,23 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
                     'vue',
                     'vue-router'
                 ],
-                dts: "types/auto-import.d.ts"
+                dts: "types/auto-import.d.ts",
             }),
             Components({
-                include: [],
-                dts: false,
-                resolvers: [
-                    ElementPlusResolver({importStyle: false})
-                ],
+                dts: "types/components.d.ts",
+                resolvers: [ElementPlusResolver()],
+            }),
+            createStyleImportPlugin({
+                resolves: [ElementPlusStyleResolve()],
+                libs: [
+                    {
+                        libraryName: 'element-plus',
+                        esModule: true,
+                        resolveStyle: (name: string) => {
+                            return `element-plus/theme-chalk/${name}.css`
+                        },
+                    },
+                ]
             }),
             createHtmlPlugin({
                 minify: false,
@@ -60,6 +74,12 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
                         icon: '/public/vite.svg'
                     },
                 },
+            }),
+            createSvgIconsPlugin({
+                // 指定需要缓存的图标文件夹
+                iconDirs: [resolve(root, 'src/assets/icons/svg')],
+                // 指定symbolId格式
+                symbolId: 'icon-[dir]-[name]',
             })
         ],
         // ******开发服务器配置******
@@ -98,5 +118,14 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
         esbuild: {
             pure: isDebugger ? ['console.log', 'debugger'] : []
         },
+        // 全局样式
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    javascriptEnabled: true,
+                    additionalData: '@import "@/assets/styles/index.scss";'
+                }
+            }
+        }
     }
 })

@@ -1,5 +1,5 @@
 <template>
-  22222
+  <svg-icon icon-class="build"/>
 </template>
 
 <script setup lang="ts" name="Home">
