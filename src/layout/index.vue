@@ -23,8 +23,7 @@ import StyleVariables from "@/assets/styles/variables.module.scss"
 
 
 const variables = ref<CSSModuleClasses>(StyleVariables)
-onMounted(()=>{
-})
+
 
 </script>
 
@@ -33,6 +32,10 @@ onMounted(()=>{
   width: 100vw;
   height: 100vh;
 
+  .header-wrapper{
+    height: 90px;
+    padding: 0;
+  }
 
 }
 </style>

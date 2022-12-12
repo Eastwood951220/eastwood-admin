@@ -4,7 +4,6 @@
 </template>
 
 <script setup lang="ts" name="MenuItem">
-
 const props = defineProps({
   icon: {
     type: String,
@@ -17,7 +16,6 @@ const props = defineProps({
     required: false,
   }
 })
-console.log(props.icon)
 </script>
 
 <style scoped lang="scss">

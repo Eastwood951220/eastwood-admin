@@ -34,7 +34,6 @@ export const useUserStore = defineStore({
             this.token = ""
         },
         GetUserInfo: async function () {
-            console.log(new Date())
             const res = await getInfo()
             const data = res.data;
             this.roles = data.roles || []

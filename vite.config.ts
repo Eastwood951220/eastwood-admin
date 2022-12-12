@@ -16,6 +16,8 @@ import {createHtmlPlugin} from 'vite-plugin-html'
 // 自定义SVG
 import {createSvgIconsPlugin} from 'vite-plugin-svg-icons'
 
+import autoprefixer from 'autoprefixer';
+
 // https://vitejs.dev/config/
 
 function pathResolve(dir: string) {
@@ -50,20 +52,20 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
             }),
             Components({
                 dts: "types/components.d.ts",
-                resolvers: [ElementPlusResolver()],
+                resolvers: [ElementPlusResolver({importStyle: false})],
             }),
-            createStyleImportPlugin({
-                resolves: [ElementPlusStyleResolve()],
-                libs: [
-                    {
-                        libraryName: 'element-plus',
-                        esModule: true,
-                        resolveStyle: (name: string) => {
-                            return `element-plus/theme-chalk/${name}.css`
-                        },
-                    },
-                ]
-            }),
+            /*     createStyleImportPlugin({
+                     resolves: [ElementPlusStyleResolve()],
+                     libs: [
+                         {
+                             libraryName: 'element-plus',
+                             esModule: true,
+                             resolveStyle: (name: string) => {
+                                 return `element-plus/theme-chalk/${name}.css`
+                             },
+                         },
+                     ]
+                 }),*/
             createHtmlPlugin({
                 minify: false,
                 entry: '/src/main.ts',
@@ -120,6 +122,21 @@ export default defineConfig(({command, mode}: ConfigEnv): UserConfig => {
         },
         // 全局样式
         css: {
+            postcss: {
+                plugins: [
+                    autoprefixer({
+                        overrideBrowserslist: [
+                            "defaults",
+                            "not ie <= 8",
+                            "last 2 versions",
+                            "> 1%",
+                            "iOS >= 7",
+                            "Android >= 4.0"
+                        ],
+                        grid: true
+                    }),
+                ]
+            },
             preprocessorOptions: {
                 scss: {
                     javascriptEnabled: true,

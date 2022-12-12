@@ -56,7 +56,7 @@ function _responseInterceptors(response: AxiosResponse) {
                 await userStore.Logout()
                 window.location.href = "/login"
             })
-            return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+            // return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
         default:
             ElMessage({
                 message: msg,

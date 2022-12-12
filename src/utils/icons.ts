@@ -35,6 +35,6 @@ export function installIcon(app: App) {
 
     // 注册element icons
     for (const [key, component] of Object.entries(elementPlusIconsVue)) {
-        componentIcon(`EIcon${key}`, component);
+        componentIcon(`ElIcon${key}`, component);
     }
 }

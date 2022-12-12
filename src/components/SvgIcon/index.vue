@@ -29,10 +29,6 @@ const isExternalIcon = computed<Boolean>(() => {
   return isExternal(props.iconClass)
 })
 const symbolId = computed(() => `#icon-${props.iconClass}`);
-console.log(props)
-onMounted(()=>{
-  console.log(222222)
-})
 </script>
 
 <style scoped lang="scss">
