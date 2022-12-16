@@ -8,13 +8,16 @@
     <el-scrollbar
         ref="scrollbarRef"
         view-class="tags-view-list"
-        style="flex-grow: 1">
-      <div v-for="tag in visitedViews"
-           :key="tag.path"
+        style="flex-grow: 1"
+        @scroll="handleScroll">
+      <div v-for="item in visitedViews"
+           :key="item.path"
            class="tags-view-item"
-           :class="{ 'active': isActive(tag) }">
-        <span>{{ tag.meta.title }}</span>
-        <el-icon v-if="!isAffix(tag)" class="del-icon">
+           :class="{ 'active': isActive(item) }"
+           @click="jumpRoute(item)"
+           @contextmenu.prevent="openContextmenu($event.currentTarget,item)">
+        <span>{{ item.meta.title }}</span>
+        <el-icon v-if="!isAffix(item)" class="del-icon" @click.stop.prevent="closeSelectedTag(item)">
           <el-icon-close/>
         </el-icon>
       </div>
@@ -35,13 +38,23 @@
       </el-icon>
     </div>
   </div>
+  <contextmenu v-if="virtualRef"
+               ref="contextmenuRef"
+               :current="contextmenuCurrent"
+               :visible="showContextmenu"
+               :virtual-ref="virtualRef"/>
 </template>
 
 <script setup lang="ts" name="NavBar">
+import type {Ref} from "vue";
 import {RouteLocationNormalized, RouteMeta, RouteRecordName, RouteRecordRawPlus} from "vue-router";
+import type {ElScrollbar} from 'element-plus'
 import path from "path-browserify";
 import {usePermissionStore} from "@/store/modules/permission";
 import {useTagsViewStore} from "@/store/modules/tagsView";
+import Contextmenu from "./Contextmenu.vue";
+import $tabs from "@/plugins/tabs"
+import _ from 'lodash'
 
 type affixRoute = {
   fullPath: string,
@@ -68,7 +81,9 @@ watch(route, () => {
   addTags()
 })
 
-
+/**
+ * 初始化Tags
+ */
 function initTags() {
   affixTags.value = filterAffixTags(routes)
   for (const tag of affixTags.value) {
@@ -76,17 +91,6 @@ function initTags() {
       tagsViewStore.AddVisitedView(tag as RouteLocationNormalized)
     }
   }
-}
-
-function addTags() {
-  const name = route.name
-  if (name) {
-    tagsViewStore.AddView(route)
-    if (route.meta.link) {
-      tagsViewStore.AddIframeView(route)
-    }
-  }
-  return
 }
 
 function filterAffixTags(routes: RouteRecordRawPlus[], basePath?: string): affixRoute[] {
@@ -113,13 +117,89 @@ function filterAffixTags(routes: RouteRecordRawPlus[], basePath?: string): affix
 
 }
 
+function addTags() {
+  const name = route.name
+  if (name) {
+    tagsViewStore.AddView(route)
+    if (route.meta.link) {
+      tagsViewStore.AddIframeView(route)
+    }
+  }
+  return
+}
+
 function isActive(tag: RouteLocationNormalized) {
   return tag.path === route.path
 }
 
 function isAffix(tag: RouteLocationNormalized) {
-
   return tag.meta && tag.meta.affix
+}
+
+function jumpRoute(tag: RouteLocationNormalized) {
+  if (!isActive(tag)) {
+    router.push(tag.fullPath)
+  }
+}
+
+function closeSelectedTag(tag: RouteLocationNormalized) {
+  $tabs.closePage(tag).then((res) => {
+    if (isActive(tag)) {
+      toLastTag(tag)
+    }
+  })
+}
+
+function toLastTag(tag: RouteLocationNormalized) {
+  const latestView = _.last(visitedViews)
+  if (latestView) {
+    router.push(latestView.fullPath)
+  } else {
+    if (tag.name === 'Dashboard') {
+      // to reload home page
+      router.replace({path: '/redirect' + tag.fullPath})
+    } else {
+      router.push('/')
+    }
+  }
+}
+
+// 右键
+const contextmenuCurrent: Ref<RouteLocationNormalized | undefined> = ref();
+const virtualRef: Ref<HTMLElement | undefined> = ref();
+const showContextmenu: Ref<Boolean> = ref(false);
+const contextmenuRef: Ref<InstanceType<typeof Contextmenu>> = ref();
+
+watch(showContextmenu, function (value) {
+  if (value) {
+    document.body.addEventListener('click', closeContextMenu)
+  } else {
+    document.body.removeEventListener('click', closeContextMenu)
+  }
+})
+
+
+function openContextmenu(event: HTMLElement, current: RouteLocationNormalized, show: Boolean = true) {
+  virtualRef.value = event
+  contextmenuCurrent.value = current
+  showContextmenu.value = show;
+}
+
+function closeContextMenu() {
+  virtualRef.value = undefined
+  showContextmenu.value = false
+}
+
+let scrollLeft = ref(0);
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
+const setScrollLeft = (left: number, isAdd = false) => {
+  if (isAdd) {
+    left = left + scrollLeft.value;
+  }
+};
+
+function handleScroll(e: { scrollLeft: number }) {
+  console.log(e.scrollLeft)
 }
 </script>
 

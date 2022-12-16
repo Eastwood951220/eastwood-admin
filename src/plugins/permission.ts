@@ -1,6 +1,6 @@
 import {DefineComponent} from 'vue';
 import {RouteRecordRawPlus, RouteComponent} from 'vue-router';
-import auth from "@/utils/auth";
+import auth from "@/plugins/auth";
 import Layout from '@/layout/index.vue'
 import ParentView from "@/layout/components/ParentView/index.vue"
 import InnerLink from '@/layout/components/InnerLink/index.vue'

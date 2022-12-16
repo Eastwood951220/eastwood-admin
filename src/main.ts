@@ -10,7 +10,7 @@ import 'element-plus/dist/index.css'
 import mitt from 'mitt'
 
 import 'virtual:svg-icons-register'
-import {installIcon} from '@/utils/icons'
+import {installIcon} from '@/plugins/icons'
 
 function bootstrap() {
 

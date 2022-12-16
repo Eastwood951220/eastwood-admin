@@ -3,7 +3,7 @@ import {RouteRecordRawPlus} from 'vue-router';
 import * as _ from 'lodash'
 import {store} from '@/store'
 import {getRouters} from "@/apis/menu";
-import {initDynamicViewsModules, filterAsyncRouter} from "@/utils/permission";
+import {initDynamicViewsModules, filterAsyncRouter} from "@/plugins/permission";
 import {router, constantRoutes} from '@/router'
 
 interface PermissionState {
