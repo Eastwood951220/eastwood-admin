@@ -17,13 +17,9 @@ function createPermissionGuard(router: Router) {
                 return false
             } else {
                 if (userStore.roles.length === 0) {
-                    try {
-                        await userStore.GetUserInfo()
-                        await permissionStore.GenerateRoutes()
-                        await router.replace({...to})
-                    } catch (e) {
-                        handleErrorGuard(to.fullPath)
-                    }
+                    await userStore.GetUserInfo()
+                    await permissionStore.GenerateRoutes()
+                    await router.replace({...to})
                 }
             }
         } else {

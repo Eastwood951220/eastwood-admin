@@ -17,7 +17,8 @@
            @click="jumpRoute(item)"
            @contextmenu.prevent="openContextmenu($event.currentTarget,item)">
         <span>{{ item.meta.title }}</span>
-        <el-icon v-if="!isAffix(item)" class="del-icon" @click.stop.prevent="closeSelectedTag(item)">
+        <el-icon v-if="!isAffix(item)" class="del-icon"
+                 @click.stop.prevent="closeSelectedTag($event.currentTarget,item)">
           <el-icon-close/>
         </el-icon>
       </div>
@@ -69,7 +70,11 @@ const route = useRoute()
 const router = useRouter()
 const routes = permissionStore.routes
 let affixTags = ref<affixRoute []>([])
-
+// 右键
+const contextmenuCurrent: Ref<RouteLocationNormalized | undefined> = ref();
+const virtualRef: Ref<HTMLElement | undefined> = ref();
+const showContextmenu: Ref<Boolean> = ref(false);
+const contextmenuRef: Ref<InstanceType<typeof Contextmenu>> = ref();
 
 onMounted(() => {
   initTags()
@@ -142,33 +147,7 @@ function jumpRoute(tag: RouteLocationNormalized) {
   }
 }
 
-function closeSelectedTag(tag: RouteLocationNormalized) {
-  $tabs.closePage(tag).then((res) => {
-    if (isActive(tag)) {
-      toLastTag(tag)
-    }
-  })
-}
 
-function toLastTag(tag: RouteLocationNormalized) {
-  const latestView = _.last(visitedViews)
-  if (latestView) {
-    router.push(latestView.fullPath)
-  } else {
-    if (tag.name === 'Dashboard') {
-      // to reload home page
-      router.replace({path: '/redirect' + tag.fullPath})
-    } else {
-      router.push('/')
-    }
-  }
-}
-
-// 右键
-const contextmenuCurrent: Ref<RouteLocationNormalized | undefined> = ref();
-const virtualRef: Ref<HTMLElement | undefined> = ref();
-const showContextmenu: Ref<Boolean> = ref(false);
-const contextmenuRef: Ref<InstanceType<typeof Contextmenu>> = ref();
 
 watch(showContextmenu, function (value) {
   if (value) {
@@ -188,6 +167,12 @@ function openContextmenu(event: HTMLElement, current: RouteLocationNormalized, s
 function closeContextMenu() {
   virtualRef.value = undefined
   showContextmenu.value = false
+}
+
+async function closeSelectedTag(event: HTMLElement, current: RouteLocationNormalized) {
+  openContextmenu(event, current, false)
+  await nextTick()
+  contextmenuRef.value.closeCurrent()
 }
 
 let scrollLeft = ref(0);

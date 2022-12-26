@@ -29,9 +29,12 @@ export const useUserStore = defineStore({
             this.token = res.data.token
         },
         Logout: async function () {
-            await logout()
-            removeToken()
-            this.token = ""
+            try {
+                await logout()
+            }finally {
+                removeToken()
+                this.token = ""
+            }
         },
         GetUserInfo: async function () {
             const res = await getInfo()

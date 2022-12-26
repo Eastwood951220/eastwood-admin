@@ -32,6 +32,11 @@ declare module 'vue-router' {
          * 外链的时候展示
          */
         link?: string
+
+        /**
+         * 是否一直显示
+         */
+        affix?: boolean
     }
 
     export interface _RouteRecordBase {
