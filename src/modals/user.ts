@@ -1,31 +1,29 @@
-export type CodeImgResponse = BaseApiResponse<{
+export type T_R_CodeImg = BaseApiResponse<{
     captchaEnabled: boolean
     img: string
     uuid: string
 }>
 
-export type LoginParams = {
+export type T_Q_Login = {
     code: string
     password: string
     username: string
     uuid: string
 }
 
-export type LoginResponse = BaseApiResponse<{
+export type T_R_Login = BaseApiResponse<{
     token: string
 }>
 
-export type UserInfoResponse = BaseApiResponse<{
+export type T_R_UserInfo = BaseApiResponse<{
     permissions: string[]
     roles: string[]
-    user: UserInfoResult
+    user: I_C_UserInfo
 }>
 
-export interface UserInfoResult {
+export interface I_C_UserInfo extends DefaultPageResponse {
     admin: boolean
     avatar: string
-    createBy: string
-    createTime: string
     delFlag: string
     dept: any
     deptId: number
@@ -40,11 +38,8 @@ export interface UserInfoResult {
     remark: string
     roleId: any
     roleIds: any
-    searchValue: any
     sex: string
     status: string
-    updateBy: string
-    updateTime: string
     userId: number
     userName: string
     userType: string

@@ -1,9 +1,9 @@
 import httpRequest from "@/utils/request";
 
-import {CodeImgResponse, LoginParams, LoginResponse, UserInfoResponse} from "@/modals/user";
+import {T_R_CodeImg, T_Q_Login, T_R_Login, T_R_UserInfo} from "@/modals/user";
 
 export function getCodeImg() {
-    return httpRequest<null, CodeImgResponse>({
+    return httpRequest<null, T_R_CodeImg>({
         url: '/captchaImage',
         headers: {
             isToken: false,
@@ -14,8 +14,8 @@ export function getCodeImg() {
 
 }
 
-export function login(data: LoginParams) {
-    return httpRequest<LoginParams, LoginResponse>({
+export function login(data: T_Q_Login) {
+    return httpRequest<T_Q_Login, T_R_Login>({
         url: '/login',
         headers: {
             isToken: false,
@@ -33,7 +33,7 @@ export function logout() {
 }
 
 export function getInfo() {
-    return httpRequest<null, UserInfoResponse>({
+    return httpRequest<null, T_R_UserInfo>({
         url: '/getInfo',
         method: 'get'
     })

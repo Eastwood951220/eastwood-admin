@@ -12,6 +12,8 @@ import mitt from 'mitt'
 import 'virtual:svg-icons-register'
 import {installIcon} from '@/plugins/icons'
 
+import autoHeight from "@/directive/autoHeight";
+
 function bootstrap() {
 
     const app = createApp(App)
@@ -20,7 +22,7 @@ function bootstrap() {
     // 配置路由
     app.use(router)
     setupRouter(app)
-
+    app.directive('auto-height', autoHeight)
 
     app.mount('#app')
 }

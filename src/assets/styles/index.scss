@@ -1,4 +1,5 @@
 @import './sidebar.scss';
+@import "./transition.scss";
 
 html {
   body {
@@ -29,3 +30,29 @@ html {
     text-decoration: none;
   }
 }
+
+.page-container {
+  width: 100%;
+  min-height: 100%;
+
+
+  .search-box {
+    margin-bottom: 20px;
+    .el-card__body{
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .el-form--inline .el-form-item {
+      width: 100%;
+      margin-right: 0!important;
+      margin-bottom: 0!important;
+      padding: 10px 0;
+    }
+
+    .el-form--inline .el-select {
+      width: 100%;
+    }
+  }
+}
+

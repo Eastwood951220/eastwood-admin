@@ -47,7 +47,7 @@
 
 <script setup lang="ts" name="Login">
 import {getCodeImg} from "@/apis/user";
-import {LoginParams} from "@/modals/user";
+import {T_Q_Login} from "@/modals/user";
 import type {FormInstance, FormRules} from 'element-plus';
 import {useUserStore} from "@/store/modules/user";
 
@@ -56,7 +56,7 @@ const router = useRouter();
 const userStore = useUserStore()
 const loginFormRef = ref<FormInstance>()
 let codeUrl = ref("")
-const loginForm: LoginParams = reactive({
+const loginForm: T_Q_Login = reactive({
   username: "",
   password: "",
   code: "",

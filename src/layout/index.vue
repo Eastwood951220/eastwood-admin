@@ -8,8 +8,7 @@
         <Header/>
       </el-header>
       <el-main>
-        Main
-        <router-view/>
+        <AppMain/>
       </el-main>
       <el-footer>Footer</el-footer>
     </el-container>
@@ -18,12 +17,11 @@
 
 <script setup lang="ts" name="Layout">
 import Sidebar from './components/Sidebar/index.vue'
-import Header from "@/layout/components/Header/index.vue";
+import Header from "./components/Header/index.vue";
+import AppMain from "./components/AppMain.vue";
 import StyleVariables from "@/assets/styles/variables.module.scss"
 
-
 const variables = ref<CSSModuleClasses>(StyleVariables)
-
 
 </script>
 
@@ -32,9 +30,13 @@ const variables = ref<CSSModuleClasses>(StyleVariables)
   width: 100vw;
   height: 100vh;
 
-  .header-wrapper{
+  .header-wrapper {
     height: 90px;
     padding: 0;
+  }
+
+  .el-main {
+    background: #f2f2f2;
   }
 
 }

@@ -48,6 +48,15 @@ declare global {
         pageSize: number,
     } & P;
 
+    interface DefaultPageResponse {
+        createBy: string
+        createTime: string
+        params: Record<string, any>
+        searchValue: string
+        updateBy: string
+        updateTime: string
+    }
+
 }
 
 export {}

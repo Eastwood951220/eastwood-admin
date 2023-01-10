@@ -237,6 +237,9 @@ function handleScroll(e: { scrollLeft: number }) {
       flex-grow: 0;
       position: relative;
       cursor: pointer;
+      span{
+        font-size: 14px;
+      }
 
       .del-icon {
         height: 100%;

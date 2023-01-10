@@ -1,7 +1,6 @@
 import {useTagsViewStoreWithout} from "@/store/modules/tagsView";
-import {RouteLocationMatched, RouteLocationNormalized} from "vue-router";
+import {RouteLocationNormalized} from "vue-router";
 import {router} from '@/router'
-import _ from 'lodash'
 
 const tagsViewStore = useTagsViewStoreWithout()
 

@@ -3,7 +3,7 @@ import {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from "axios";
 import {ElMessage, ElMessageBox} from 'element-plus';
 import {getToken, removeToken} from "@/utils/cookies";
 import {useUserStoreWithout} from '@/store/modules/user'
-
+import {tansParams} from "@/utils";
 import errorCode from "@/config/errorCode";
 
 const request = new Request({
@@ -21,6 +21,12 @@ function _requestInterceptors(config: AxiosRequestConfig): AxiosRequestConfig {
     const isToken = (config.headers || {}).isToken === false
     if (getToken() && !isToken) {
         (config.headers as AxiosRequestHeaders)['Authorization'] = 'Bearer ' + getToken()
+    }
+    // get请求映射params参数
+    if (config.method === 'get' && config.params) {
+        let url = config.url + '?' + tansParams(config.params);
+        config.params = {};
+        config.url = url;
     }
     return config
 }

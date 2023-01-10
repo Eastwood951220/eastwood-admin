@@ -1,8 +1,8 @@
 import httpRequest from "@/utils/request";
-import {GetRoutersResponse} from "@/modals/menu";
+import {T_R_Routers} from "@/modals/menu";
 
 export const getRouters = () => {
-    return httpRequest<null,GetRoutersResponse>({
+    return httpRequest<null,T_R_Routers>({
         url: '/getRouters',
         method: 'get'
     })
