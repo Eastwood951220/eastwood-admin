@@ -85,6 +85,6 @@ function handleCurrentChange(val: number) {
 .pagination-container{
   margin-top: 12px;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 </style>

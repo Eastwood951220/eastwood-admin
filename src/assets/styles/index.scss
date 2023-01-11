@@ -56,3 +56,21 @@ html {
   }
 }
 
+.el-table {
+  .el-table__header-wrapper, .el-table__fixed-header-wrapper {
+    th {
+      word-break: break-word;
+      background-color: #f8f8f9;
+      color: #515a6e;
+      height: 40px;
+      font-size: 13px;
+    }
+  }
+
+  .el-table__body-wrapper {
+    .el-button [class*="el-icon-"] + span {
+      margin-left: 1px;
+    }
+  }
+}
+

@@ -6,6 +6,7 @@ import {useUserStoreWithout} from '@/store/modules/user'
 import {tansParams} from "@/utils";
 import errorCode from "@/config/errorCode";
 
+export let isReLogin = {show: false};
 const request = new Request({
     interceptors: {
         // 请求拦截器
@@ -53,15 +54,25 @@ function _responseInterceptors(response: AxiosResponse) {
         case 200:
             return data
         case 401:
-            ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
-                    confirmButtonText: '重新登录',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }
-            ).then(async () => {
-                await userStore.Logout()
-                window.location.href = "/login"
-            })
+            if (!isReLogin.show) {
+                isReLogin.show = true
+                ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
+                        confirmButtonText: '重新登录',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }
+                ).then(async () => {
+                    try {
+                        await userStore.Logout()
+                        location.href = import.meta.env.VITE_APP_CONTEXT_PATH + "index";
+                    } catch (e) {
+                        location.href = "/login"
+                    }
+                }).finally(() => {
+                    isReLogin.show = false
+                })
+            }
+            /* */
             return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
         default:
             ElMessage({
