@@ -2,12 +2,20 @@
   <div class="top-bar">
     <Hamburger/>
     <Breadcrumb/>
+    <span @click="logout">退出登录</span>
   </div>
 </template>
 
 <script setup lang="ts" name="TopBar">
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
+
+import {useUserStore} from "@/store/modules/user";
+const userStore = useUserStore()
+
+function logout(){
+  userStore.Logout()
+}
 </script>
 
 <style scoped lang="scss">

@@ -34,6 +34,7 @@ export const useUserStore = defineStore({
             } finally {
                 removeToken()
                 this.token = ""
+                location.href = "/login"
             }
         },
         GetUserInfo: async function () {

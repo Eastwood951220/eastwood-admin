@@ -184,6 +184,11 @@
   resolved "https://registry.npmmirror.com/@types/estree/-/estree-1.0.0.tgz#5fb2e536c1ae9bf35366eed879e827fa59ca41c2"
   integrity sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==
 
+"@types/file-saver@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.npmmirror.com/@types/file-saver/-/file-saver-2.0.5.tgz#9ee342a5d1314bb0928375424a2f162f97c310c7"
+  integrity sha512-zv9kNf3keYegP5oThGLaPk8E081DFDuwfqjtiTzm6PoxChdJ1raSuADf2YGCVIyrSynLrgc8JWv296s7Q7pQSQ==
+
 "@types/js-cookie@^3.0.2":
   version "3.0.2"
   resolved "https://registry.npmmirror.com/@types/js-cookie/-/js-cookie-3.0.2.tgz#451eaeece64c6bdac8b2dde0caab23b085899e0d"
@@ -1578,6 +1583,11 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
+file-saver@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.npmmirror.com/file-saver/-/file-saver-2.0.5.tgz#d61cfe2ce059f414d899e9dd6d4107ee25670c38"
+  integrity sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==
+
 filelist@^1.0.1:
   version "1.0.4"
   resolved "https://registry.npmmirror.com/filelist/-/filelist-1.0.4.tgz#f78978a1e944775ff9e62e744424f215e58352b5"
@@ -2627,6 +2637,11 @@ mlly@^1.0.0:
     pathe "^1.0.0"
     pkg-types "^1.0.0"
     ufo "^1.0.0"
+
+moment@^2.29.4:
+  version "2.29.4"
+  resolved "https://registry.npmmirror.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 ms@2.0.0:
   version "2.0.0"

@@ -16,7 +16,8 @@
           type="success"
           plain
           size="small"
-          icon="el-icon-edit">
+          icon="el-icon-edit"
+          :disabled="isEditDisabled">
         修改
       </el-button>
       <el-button
@@ -25,7 +26,8 @@
           type="danger"
           plain
           size="small"
-          icon="el-icon-delete">
+          icon="el-icon-delete"
+          :disabled="isDeleteDisabled">
         删除
       </el-button>
       <el-button
@@ -59,10 +61,24 @@
 <script setup lang="ts" name="ToolBar">
 import auth from '@/plugins/auth'
 import {PropType} from "vue";
+import {download} from "@/utils/request/download";
 
 const props = defineProps({
   layouts: {
     type: String,
+    required: false
+  },
+  params: {
+    type: Object,
+  },
+  isEditDisabled: {
+    type: Boolean,
+    default: true,
+    required: false
+  },
+  isDeleteDisabled: {
+    type: Boolean,
+    default: true,
     required: false
   },
   addPerm: {
@@ -90,9 +106,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: 'addMethod'): void,
   (e: 'editMethod'): void,
-  (e: 'deleteMethod'): void,
-  (e: 'importMethod'): void,
-  (e: 'exportMethod'): void,
+  (e: 'deleteMethod'): void
 }>();
 
 /*新增*/
@@ -144,7 +158,7 @@ const isShowImport = computed<Boolean>(() => {
 })
 
 function importMethod() {
-  emit("importMethod")
+
 }
 
 /*导出*/
@@ -157,7 +171,9 @@ const isShowExport = computed<Boolean>(() => {
 })
 
 function exportMethod() {
-  emit("exportMethod")
+  download("/system/user/export", props.params, "测试").then(res => {
+
+  })
 }
 
 

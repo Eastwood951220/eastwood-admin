@@ -31,7 +31,7 @@ export function tansParams(params: Record<string, any>) {
  * @param {Record<string, any>} queryParams
  * @param propName
  */
-export function addDataRange<T extends Record<string, any>>(queryParams: T, propName?: String) {
+export function addDataRange<T extends Record<string, any>>(queryParams: T, propName?: String): T {
     let params = _.cloneDeep(queryParams)
     if (!(typeof (params.params) === 'object' && params.params !== null && !Array.isArray(params.params))) {
         _.assign(params, {params: {}})
@@ -54,4 +54,22 @@ export function addDataRange<T extends Record<string, any>>(queryParams: T, prop
     return params
 }
 
+// 转换字符串，undefined,null等转化为""
+export function parseStrEmpty(str: string | null | undefined): string {
+    if (!str || str == "undefined" || str == "null") {
+        return "";
+    }
+    return str;
+}
+
+// 验证是否为blob格式
+export async function blobValidate(data: any) {
+    try {
+        const text = await data.text();
+        JSON.parse(text);
+        return false;
+    } catch (error) {
+        return true;
+    }
+}
 

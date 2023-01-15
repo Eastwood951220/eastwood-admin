@@ -1,6 +1,7 @@
 import {createApp} from 'vue'
 import {router, setupRouter} from "@/router";
 import {store} from '@/store'
+import {setupDirective} from "@/directive";
 import App from './App.vue'
 
 // element-plus 配置
@@ -12,7 +13,6 @@ import mitt from 'mitt'
 import 'virtual:svg-icons-register'
 import {installIcon} from '@/plugins/icons'
 
-import autoHeight from "@/directive/autoHeight";
 
 function bootstrap() {
 
@@ -22,7 +22,8 @@ function bootstrap() {
     // 配置路由
     app.use(router)
     setupRouter(app)
-    app.directive('auto-height', autoHeight)
+    // 自定义命令
+    setupDirective(app)
 
     app.mount('#app')
 }

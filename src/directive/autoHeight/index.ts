@@ -10,9 +10,11 @@ export default {
         const searchBox = <HTMLElement>document.querySelector(".search-box")
         if (searchBox) maxTableHeight -= searchBox.offsetHeight
         const maxBoxHeight = _.max([maxTableHeight - 20, 620])
+        // el-tab 高度
         if (binding.value === 1) {
             el.style.height = `${maxBoxHeight}px`
         }
+        // el-table 高度
         if (binding.value === 2 && maxBoxHeight !== undefined) {
             let maxTableHeight = maxBoxHeight
             const toolBar = <HTMLElement>document.querySelector(".tool-bar")

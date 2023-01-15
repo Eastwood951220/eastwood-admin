@@ -2,7 +2,8 @@ import type {Router} from 'vue-router';
 import {ElMessage} from "element-plus";
 import {useUserStoreWithout} from "@/store/modules/user";
 import {usePermissionStoreWithout} from "@/store/modules/permission";
-import {done, start} from "@/utils/nProgress";
+import {done, start, remove} from "@/utils/nProgress";
+import {closeLoading, loading} from '@/utils/loading';
 import {removeToken} from "@/utils/cookies";
 import {isReLogin} from '@/utils/request'
 
@@ -28,12 +29,14 @@ function createPermissionGuard(router: Router) {
                     } catch (err) {
                         try {
                             await userStore.Logout()
-                            ElMessage.error(<string>err)
+                            await ElMessage.error(<string>err)
                             await router.replace({path: '/'})
                         } catch (e) {
                             location.href = "/login"
                         }
                     }
+                } else {
+                    return true
                 }
             }
         } else {
@@ -47,12 +50,16 @@ function createPermissionGuard(router: Router) {
 }
 
 function createProgressGuard(router: Router) {
-    router.beforeEach(async (to) => {
+    router.beforeEach(async (to, from) => {
+        remove()
         start(to.matched.length);
+        // closeLoading(true, from.matched.length, 'layout');
+        // loading({}, to.matched.length, 'layout');
         return true;
     });
-    router.afterEach(async () => {
-        done()
+    router.afterEach(async (to, from) => {
+        done(from.matched.length)
+        // closeLoading(false, to.matched.length, 'layout');
     })
 }
 

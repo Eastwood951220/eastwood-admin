@@ -22,25 +22,47 @@ export type T_R_UserInfo = BaseApiResponse<{
 }>
 
 export interface I_C_UserInfo extends DefaultPageResponse {
-    admin: boolean
-    avatar: string
-    delFlag: string
-    dept: any
+    admin?: boolean
+    avatar?: string
+    delFlag?: string
+    dept?: any
     deptId: number
     email: string
-    loginDate: string
-    loginIp: string
+    loginDate?: string
+    loginIp?: string
     nickName: string
-    params: any
     password: string
     phonenumber: string
     postIds: any
     remark: string
-    roleId: any
+    roleId?: any
     roleIds: any
     sex: string
     status: string
-    userId: number
+    userId?: string
     userName: string
-    userType: string
+    userType?: string
+}
+
+export type T_R_User = BaseApiResponse<{
+    postIds?: number[],
+    posts: any[],
+    roleIds?: number[],
+    roles: any[],
+    user?: I_C_UserInfo
+}>
+
+export class C_UserInfo implements I_C_UserInfo {
+    userId: any = undefined
+    deptId: any = undefined
+    userName: string = ""
+    nickName: string = ""
+    email: string = ""
+    password: string = ""
+    phonenumber: string = ""
+    sex: string = ""
+    status: string = "0"
+    remark: string = ""
+    postIds = []
+    roleIds = []
 }

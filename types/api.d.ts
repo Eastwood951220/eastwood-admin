@@ -28,8 +28,6 @@ declare global {
         data?: T,
     }
 
-    type BaseResponse<T = any> = BaseApiResponse<T> | BasePageResponse<T>
-
     interface BaseApiResponse<T> {
         code: number
         msg: string
@@ -49,12 +47,17 @@ declare global {
     } & P;
 
     interface DefaultPageResponse {
-        createBy: string
-        createTime: string
-        params: Record<string, any>
-        searchValue: string
-        updateBy: string
-        updateTime: string
+        createBy?: string
+        createTime?: string
+        params?: Record<string, any>
+        searchValue?: string
+        updateBy?: string
+        updateTime?: string
+    }
+
+    interface downloadResponse{
+        filename: string,
+        data: Blob
     }
 
 }

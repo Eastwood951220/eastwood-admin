@@ -1,6 +1,6 @@
-import Request from './request'
 import {AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse} from "axios";
 import {ElMessage, ElMessageBox} from 'element-plus';
+import Request from './request'
 import {getToken, removeToken} from "@/utils/cookies";
 import {useUserStoreWithout} from '@/store/modules/user'
 import {tansParams} from "@/utils";
@@ -22,6 +22,11 @@ function _requestInterceptors(config: AxiosRequestConfig): AxiosRequestConfig {
     const isToken = (config.headers || {}).isToken === false
     if (getToken() && !isToken) {
         (config.headers as AxiosRequestHeaders)['Authorization'] = 'Bearer ' + getToken()
+    }
+    const isDownload = (config.headers || {}).isDownload === "true"
+    if (isDownload) {
+        (config.headers as AxiosRequestHeaders)['Content-Type'] = 'application/x-www-form-urlencoded'
+        config.responseType = "blob"
     }
     // get请求映射params参数
     if (config.method === 'get' && config.params) {
@@ -48,6 +53,14 @@ function _responseInterceptors(response: AxiosResponse) {
         removeToken()
         return Promise.reject("服务器异常")
     }
+    const isDownload = (response.config.headers || {}).isDownload === "true"
+    if (isDownload) {
+        const filename = decodeURI(<string>response.headers['download-filename']) || (response.config.headers || {})["download-filename"]
+        return {
+            filename,
+            data
+        }
+    }
     const code = data.code || 200;
     const msg = data.msg || errorCode[code] || errorCode.default
     switch (code) {
@@ -72,7 +85,6 @@ function _responseInterceptors(response: AxiosResponse) {
                     isReLogin.show = false
                 })
             }
-            /* */
             return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
         default:
             ElMessage({
